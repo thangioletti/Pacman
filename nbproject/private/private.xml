@@ -3,7 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/Rafael%20Schmidt/Documents/NetBeansProjects/Pacman/src/Pacman/Run.java</file>
+=======
+            <file>file:/home/angioletti/NetBeansProjects/Pacman/src/Pacman/Jlayer.java</file>
+            <file>file:/home/angioletti/NetBeansProjects/Pacman/src/Pacman/Run.java</file>
+            <file>file:/home/angioletti/NetBeansProjects/Pacman/src/Pacman/Pacman.java</file>
+            <file>file:/home/angioletti/NetBeansProjects/Pacman/src/Pacman/Ghost.java</file>
+>>>>>>> 835942198b60908c7b72ed54b1f694a9ba9dabb9
         </group>
     </open-files>
 </project-private>

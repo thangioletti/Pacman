@@ -19,17 +19,16 @@ public class Tabuleiro {
     public int[][] aMatriz = new int[iLinha][iColuna];
 
     public Tabuleiro() {
-        
+
         /*VALORES
         * 1 - Parede
         * 2 - Espaço preto
         * 3 - Espaço com semente
         * 4 - Pacman
         * 5 - Ghost
-        */
-        
+         */
         int iGhost = 0;
-        
+
         aMatriz[0][0] = 1;
         aMatriz[0][1] = 1;
         aMatriz[0][2] = 1;
@@ -85,20 +84,19 @@ public class Tabuleiro {
         aMatriz[0][9] = 1;
         aMatriz[0][10] = 1;
         aMatriz[0][11] = 1;
-        aMatriz[0][11] = 1;
         aMatriz[0][12] = 1;
         aMatriz[1][7] = 1;
         aMatriz[1][8] = 2;
-        aMatriz[1][9] = 2;
+        aMatriz[1][9] = 5;
         aMatriz[1][10] = 5;
-        aMatriz[1][11] = 5;
-        aMatriz[1][12] = 1;
+        aMatriz[1][11] = 1;
+        aMatriz[1][12] = 3;
         aMatriz[2][7] = 1;
         aMatriz[2][8] = 1;
         aMatriz[2][9] = 2;
-        aMatriz[2][10] = 2;
+        aMatriz[2][10] = 1;
         aMatriz[2][11] = 1;
-        aMatriz[2][12] = 1;
+        aMatriz[2][12] = 2;
         aMatriz[3][7] = 2;
         aMatriz[3][8] = 2;
         aMatriz[3][9] = 2;
@@ -111,19 +109,17 @@ public class Tabuleiro {
         aMatriz[4][10] = 1;
         aMatriz[4][11] = 1;
         aMatriz[4][11] = 1;
-        aMatriz[4][12] = 1;
+        aMatriz[4][12] = 3;
         aMatriz[5][7] = 2;
         aMatriz[5][8] = 2;
         aMatriz[5][9] = 2;
         aMatriz[5][10] = 3;
-        aMatriz[5][11] = 3;
         aMatriz[5][11] = 3;
         aMatriz[5][12] = 3;
         aMatriz[6][7] = 1;
         aMatriz[6][8] = 1;
         aMatriz[6][9] = 1;
         aMatriz[6][10] = 1;
-        aMatriz[6][11] = 1;
         aMatriz[6][11] = 1;
         aMatriz[6][12] = 1;
 
@@ -133,49 +129,42 @@ public class Tabuleiro {
         aMatriz[0][16] = 1;
         aMatriz[0][17] = 1;
         aMatriz[0][18] = 1;
-        aMatriz[0][19] = 1;
         aMatriz[1][13] = 3;
         aMatriz[1][14] = 3;
         aMatriz[1][15] = 3;
         aMatriz[1][16] = 3;
         aMatriz[1][17] = 3;
-        aMatriz[1][18] = 3;
-        aMatriz[1][19] = 1;
+        aMatriz[1][18] = 1;
         aMatriz[2][13] = 2;
         aMatriz[2][14] = 2;
-        aMatriz[2][15] = 2;
+        aMatriz[2][15] = 1;
         aMatriz[2][16] = 1;
-        aMatriz[2][17] = 1;
-        aMatriz[2][18] = 3;
-        aMatriz[2][19] = 1;
-        aMatriz[3][13] = 2;
-        aMatriz[3][14] = 1;
+        aMatriz[2][17] = 3;
+        aMatriz[2][18] = 1;
+        aMatriz[3][13] = 1;
+        aMatriz[3][14] = 2;
         aMatriz[3][15] = 2;
-        aMatriz[3][16] = 2;
-        aMatriz[3][17] = 1;
-        aMatriz[3][18] = 3;
-        aMatriz[3][19] = 1;
-        aMatriz[4][13] = 3;
-        aMatriz[4][14] = 1;
-        aMatriz[4][15] = 3;
+        aMatriz[3][16] = 1;
+        aMatriz[3][17] = 3;
+        aMatriz[3][18] = 1;
+        aMatriz[4][13] = 1;
+        aMatriz[4][14] = 3;
+        aMatriz[4][15] = 1;
         aMatriz[4][16] = 1;
-        aMatriz[4][17] = 1;
-        aMatriz[4][18] = 3;
-        aMatriz[4][19] = 1;
+        aMatriz[4][17] = 3;
+        aMatriz[4][18] = 1;
         aMatriz[5][13] = 3;
         aMatriz[5][14] = 3;
         aMatriz[5][15] = 3;
         aMatriz[5][16] = 3;
         aMatriz[5][17] = 3;
-        aMatriz[5][18] = 3;
-        aMatriz[5][19] = 1;
+        aMatriz[5][18] = 1;
         aMatriz[6][13] = 1;
         aMatriz[6][14] = 1;
         aMatriz[6][15] = 1;
         aMatriz[6][16] = 1;
         aMatriz[6][17] = 1;
         aMatriz[6][18] = 1;
-        aMatriz[6][19] = 1;
 
         int iTop = 0;
         for (int iLine = 0; iLine < iLinha; iLine++) {
@@ -219,8 +208,6 @@ public class Tabuleiro {
                     Run.Ghost[iGhost].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/ghostpink1.png")));
                     iGhost++;
                 }
-
-                
 
                 iLeft += 26;
             }

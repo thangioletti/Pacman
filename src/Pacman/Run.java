@@ -13,7 +13,9 @@ import javax.swing.JLabel;
  * @author angioletti
  */
 public class Run extends javax.swing.JFrame {
-
+    
+    public static JLabel Pacman;
+    public static JLabel[] Ghost = new JLabel[4];
     /**
      * Creates new form Run
      */
@@ -23,27 +25,19 @@ public class Run extends javax.swing.JFrame {
     public Run() {
         initComponents();
         
-        Pacman oPac = new Pacman(1,3);
+        Pacman oPac = new Pacman(1,2);
         aGhosts[0] = new Ghost(0, "cyan");
-        aGhosts[1] = new Ghost(1, "hollow");
-        aGhosts[2] = new Ghost(2, "pink");
-        aGhosts[3] = new Ghost(3, "orange");
+        aGhosts[1] = new Ghost(1, "orange");
         Jlayer musica = new Jlayer();
                 
         Thread th1 = new Thread(oPac);
-        th1.start();
+        th1.start();                
         
         Thread th2 = new Thread(aGhosts[0]);
         th2.start();
         
         Thread th3 = new Thread(aGhosts[1]);
-        th3.start();
-        
-        Thread th4 = new Thread(aGhosts[2]);
-        th4.start();
-        
-        Thread th5 = new Thread(aGhosts[3]);
-        th5.start();
+        th3.start();                
         
         musica.main(null);
         
@@ -52,22 +46,7 @@ public class Run extends javax.swing.JFrame {
     }
     
     public static void animateGhost(int iCodGhost, ImageIcon oIcon){
-        switch (iCodGhost) {
-            case 0:
-                Ghost1.setIcon(oIcon);
-                break;
-            case 1:
-                Ghost2.setIcon(oIcon);
-                break;
-            case 2:
-                Ghost3.setIcon(oIcon);
-                break;
-            case 3:
-                Ghost4.setIcon(oIcon);
-                break;
-            default:
-                break;
-        }
+        Ghost[iCodGhost].setIcon(oIcon);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -78,22 +57,18 @@ public class Run extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Pacman = new javax.swing.JLabel();
-        Ghost1 = new javax.swing.JLabel();
-        Ghost2 = new javax.swing.JLabel();
-        Ghost3 = new javax.swing.JLabel();
-        Ghost4 = new javax.swing.JLabel();
         Fundo = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        Pacman.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/pac-close.png"))); // NOI18N
+        Fundo.setBackground(new java.awt.Color(0, 0, 0));
+        Fundo.setPreferredSize(new java.awt.Dimension(520, 295));
 
         javax.swing.GroupLayout FundoLayout = new javax.swing.GroupLayout(Fundo);
         Fundo.setLayout(FundoLayout);
         FundoLayout.setHorizontalGroup(
             FundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 659, Short.MAX_VALUE)
+            .addGap(0, 520, Short.MAX_VALUE)
         );
         FundoLayout.setVerticalGroup(
             FundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,38 +79,11 @@ public class Run extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(Ghost2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Fundo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Ghost3)
-                    .addComponent(Pacman)
-                    .addComponent(Ghost1)
-                    .addComponent(Ghost4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(Fundo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Ghost4))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(Pacman)
-                        .addGap(52, 52, 52)
-                        .addComponent(Ghost1)
-                        .addGap(67, 67, 67)
-                        .addComponent(Ghost2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Ghost3)))
-                .addGap(47, 47, 47))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(Fundo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(Fundo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -178,10 +126,5 @@ public class Run extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JPanel Fundo;
-    public static javax.swing.JLabel Ghost1;
-    public static javax.swing.JLabel Ghost2;
-    public static javax.swing.JLabel Ghost3;
-    public static javax.swing.JLabel Ghost4;
-    public static javax.swing.JLabel Pacman;
     // End of variables declaration//GEN-END:variables
 }

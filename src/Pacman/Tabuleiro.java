@@ -19,7 +19,17 @@ public class Tabuleiro {
     public int[][] aMatriz = new int[iLinha][iColuna];
 
     public Tabuleiro() {
-
+        
+        /*VALORES
+        * 1 - Parede
+        * 2 - Espaço preto
+        * 3 - Espaço com semente
+        * 4 - Pacman
+        * 5 - Ghost
+        */
+        
+        int iGhost = 0;
+        
         aMatriz[0][0] = 1;
         aMatriz[0][1] = 1;
         aMatriz[0][2] = 1;
@@ -80,9 +90,8 @@ public class Tabuleiro {
         aMatriz[1][7] = 1;
         aMatriz[1][8] = 2;
         aMatriz[1][9] = 2;
-        aMatriz[1][10] = 2;
-        aMatriz[1][11] = 2;
-        aMatriz[1][11] = 2;
+        aMatriz[1][10] = 5;
+        aMatriz[1][11] = 5;
         aMatriz[1][12] = 1;
         aMatriz[2][7] = 1;
         aMatriz[2][8] = 1;
@@ -93,8 +102,7 @@ public class Tabuleiro {
         aMatriz[3][7] = 2;
         aMatriz[3][8] = 2;
         aMatriz[3][9] = 2;
-        aMatriz[3][10] = 2;
-        aMatriz[3][11] = 2;
+        aMatriz[3][10] = 4;
         aMatriz[3][11] = 2;
         aMatriz[3][12] = 2;
         aMatriz[4][7] = 1;
@@ -177,17 +185,42 @@ public class Tabuleiro {
                 String sImg = "";
                 if (aMatriz[iLine][iCol] == 1) {
                     sImg = "azul";
+                    JLabel Black = new javax.swing.JLabel();
+                    Black.setSize(26, 26);
+                    Black.setLocation(iLeft, iTop);
+                    Run.Fundo.add(Black);
+                    Black.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
                 } else if (aMatriz[iLine][iCol] == 2) {
                     sImg = "preto";
+                    JLabel Black = new javax.swing.JLabel();
+                    Black.setSize(26, 26);
+                    Black.setLocation(iLeft, iTop);
+                    Run.Fundo.add(Black);
+                    Black.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
                 } else if (aMatriz[iLine][iCol] == 3) {
                     sImg = "semente";
+                    JLabel Black = new javax.swing.JLabel();
+                    Black.setSize(26, 26);
+                    Black.setLocation(iLeft, iTop);
+                    Run.Fundo.add(Black);
+                    Black.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
+                } else if (aMatriz[iLine][iCol] == 4) {
+                    sImg = "pac-close";
+                    Run.Pacman = new javax.swing.JLabel();
+                    Run.Pacman.setSize(26, 26);
+                    Run.Pacman.setLocation(iLeft, iTop);
+                    Run.Fundo.add(Run.Pacman);
+                    Run.Pacman.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
+                } else if (aMatriz[iLine][iCol] == 5) {
+                    Run.Ghost[iGhost] = new javax.swing.JLabel();
+                    Run.Ghost[iGhost].setSize(26, 26);
+                    Run.Ghost[iGhost].setLocation(iLeft, iTop);
+                    Run.Fundo.add(Run.Ghost[iGhost]);
+                    Run.Ghost[iGhost].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/ghostpink1.png")));
+                    iGhost++;
                 }
 
-                JLabel Black = new javax.swing.JLabel();
-                Black.setSize(26, 26);
-                Black.setLocation(iLeft, iTop);
-                Run.Fundo.add(Black);
-                Black.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
+                
 
                 iLeft += 26;
             }

@@ -16,7 +16,6 @@ import javax.swing.ImageIcon;
 public class Ghost implements Runnable{
     
     private int iCod;
-    private int iPos = 1;
     private String sCor;
 
     public int getiCod() {
@@ -25,14 +24,6 @@ public class Ghost implements Runnable{
 
     public void setiCod(int iCod) {
         this.iCod = iCod;
-    }
-
-    public int getiPos() {
-        return iPos;
-    }
-
-    public void setiPos(int iPos) {
-        this.iPos = iPos;
     }
 
     public String getsCor() {
@@ -51,21 +42,7 @@ public class Ghost implements Runnable{
     
     private void Animation(){
         
-        String sNameImage = "/Pacman/images/ghost"+this.getsCor()+this.getiPos()+".png";
-        
-        {//TROCA POSIÇÃO
-            switch (this.getiPos()){
-                case 1:
-                    this.setiPos(2);
-                    break;
-                case 2:
-                    this.setiPos(1);
-                    break;
-                default:
-                    break;
-            }
-        }
-        
+        String sNameImage = "/Pacman/images/g"+this.getsCor()+".gif";        
         ImageIcon oIcon = new ImageIcon(getClass().getResource(sNameImage));
         Run.animateGhost(this.getiCod(), oIcon);
         

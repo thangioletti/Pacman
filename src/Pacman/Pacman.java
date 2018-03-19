@@ -16,16 +16,7 @@ import javax.swing.ImageIcon;
  */
 public class Pacman implements Runnable{
     
-    private int iOpen;
     private int iDirection;
-
-    public int getiOpen() {
-        return iOpen;
-    }
-
-    public void setiOpen(int iOpen) {
-        this.iOpen = iOpen;
-    }
 
     public int getiDirection() {
         return iDirection;
@@ -35,14 +26,12 @@ public class Pacman implements Runnable{
         this.iDirection = iDirection;
     }
 
-    public Pacman(int iOpen, int iDirection) {
-        this.iOpen = iOpen;
+    public Pacman(int iDirection) {
         this.iDirection = iDirection;
     }        
     
     private void Animation(){
-        
-        String sNameImage = "/Pacman/images/pac-";
+                
         String sSide = "";
         
         {//DIREÇÃO
@@ -64,40 +53,7 @@ public class Pacman implements Runnable{
                     break;                
             }
         }
-
-        {//Aberto ou fechado
-            switch (this.getiOpen()){
-                case 1: //Boca Aberta
-                    sNameImage += "open-"+sSide;                                                    
-                    break;
-                case 2: //Boca Aberta
-                    sNameImage += "opening-"+sSide;                                                    
-                    break;
-                case 3: //Boca fechada
-                    sNameImage += "close";
-                    break;
-                default:
-                    break;                
-            }
-        }
-        
-        {//TROCA POSIÇÃO DE ABERTO E FECHADO
-            switch (this.getiOpen()){
-                case 1:
-                    this.setiOpen(2);
-                    break;
-                case 2:
-                    this.setiOpen(3);
-                    break;
-                case 3:
-                    this.setiOpen(1);
-                    break;
-                default:
-                    break;
-            }
-        }
-        
-        sNameImage+=".png";
+        String sNameImage = "/Pacman/images/"+sSide+".gif";        
         
         ImageIcon oIcon = new ImageIcon(getClass().getResource(sNameImage));
         Run.Pacman.setIcon(oIcon);

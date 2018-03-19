@@ -25,9 +25,9 @@ public class Run extends javax.swing.JFrame {
     public Run() {
         initComponents();
         
-        Pacman oPac = new Pacman(1,2);
-        aGhosts[0] = new Ghost(0, "cyan");
-        aGhosts[1] = new Ghost(1, "orange");
+        Pacman oPac = new Pacman(2);
+        aGhosts[0] = new Ghost(0, "Pink");
+        aGhosts[1] = new Ghost(1, "Red");
         Jlayer musica = new Jlayer();
                 
         Thread th1 = new Thread(oPac);

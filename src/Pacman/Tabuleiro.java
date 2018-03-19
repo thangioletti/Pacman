@@ -89,8 +89,8 @@ public class Tabuleiro {
         aMatriz[1][8] = 2;
         aMatriz[1][9] = 5;
         aMatriz[1][10] = 5;
-        aMatriz[1][11] = 1;
-        aMatriz[1][12] = 3;
+        aMatriz[1][11] = 2;
+        aMatriz[1][12] = 1;
         aMatriz[2][7] = 1;
         aMatriz[2][8] = 1;
         aMatriz[2][9] = 2;

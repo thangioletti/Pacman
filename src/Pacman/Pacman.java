@@ -16,18 +16,45 @@ import javax.swing.ImageIcon;
  */
 public class Pacman implements Runnable{
     
-    private int iDirection;
+    private int iDirectionGif;
+    /*iDirectionGif 
+    *Variável especifica o git que será utilizado
+    *Valores
+    * 1 - Direita
+    * 2 - Esquerda
+    * 3 - Cima
+    * 4 - Baixo
+    */
+    
+    private int iDirectionMove;
+    /*iDirectionMove 
+    * Variável controla o estado em que o pacman está se movendo
+    * Valores 
+    * 0 - Parado
+    * 1 - Direita
+    * 2 - Esquerda
+    * 3 - Cima
+    * 4 - Baixo
+    */
+    public int getiDirectionMove() {
+        return iDirectionMove;
+    }
 
+    public void setiDirectionMove(int iDirectionMove) {
+        this.iDirectionMove = iDirectionMove;
+    }
+    
     public int getiDirection() {
-        return iDirection;
+        return iDirectionGif;
     }
 
     public void setiDirection(int iDirection) {
-        this.iDirection = iDirection;
+        this.iDirectionGif = iDirection;
     }
 
-    public Pacman(int iDirection) {
-        this.iDirection = iDirection;
+    public Pacman(int iDirectionGif) {
+        this.iDirectionMove = 0;    
+        this.iDirectionGif = iDirectionGif;
     }        
     
     private void Animation(){

@@ -5,6 +5,9 @@
  */
 package Pacman;
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -13,41 +16,70 @@ import javax.swing.JLabel;
  * @author angioletti
  */
 public class Run extends javax.swing.JFrame {
-    
+
     public static JLabel Pacman;
     public static JLabel[] Ghost = new JLabel[4];
     /**
      * Creates new form Run
      */
-    
+
     static Ghost aGhosts[] = new Ghost[4];
-    
+
     public Run() {
         initComponents();
-        
+
         Pacman oPac = new Pacman(2);
         aGhosts[0] = new Ghost(0, "Pink");
         aGhosts[1] = new Ghost(1, "Red");
         Jlayer musica = new Jlayer();
-                
+
         Thread th1 = new Thread(oPac);
-        th1.start();                
-        
+        th1.start();
+
         Thread th2 = new Thread(aGhosts[0]);
         th2.start();
-        
+
         Thread th3 = new Thread(aGhosts[1]);
-        th3.start();                
-        
+        th3.start();
+
         musica.main(null);
-        
-        Tabuleiro tb = new Tabuleiro();
-        
+
+        Tabuleiro tb = new Tabuleiro();                
+        Controles.addKeyListener(new KeyAdapter() {  
+            public void keyPressed(java.awt.event.KeyEvent e) {  
+                switch(e.getKeyCode()) {
+                    case 39: //Direita[
+                        oPac.setiDirection(1);
+                        break;
+                    case 37: //Esquerda
+                        oPac.setiDirection(2);
+                        break;
+                    case 38: //Cima
+                        oPac.setiDirection(3);
+                        break;
+                    case 40: //Baixo
+                        oPac.setiDirection(4);
+                        break;                    
+                    default:
+                        break;
+                }
+                    
+                System.out.println(e.getKeyCode());
+            };  
+        });  
     }
     
-    public static void animateGhost(int iCodGhost, ImageIcon oIcon){
+    
+ 
+    public void keyReleased(KeyEvent ke){
+        System.out.println(ke.getKeyCode());
+    }
+
+
+    public static void animateGhost(int iCodGhost, ImageIcon oIcon) {
         Ghost[iCodGhost].setIcon(oIcon);
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -57,7 +89,11 @@ public class Run extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTextField1 = new javax.swing.JTextField();
         Fundo = new javax.swing.JPanel();
+        Controles = new javax.swing.JTextField();
+
+        jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -68,18 +104,24 @@ public class Run extends javax.swing.JFrame {
         Fundo.setLayout(FundoLayout);
         FundoLayout.setHorizontalGroup(
             FundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 520, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FundoLayout.createSequentialGroup()
+                .addGap(0, 632, Short.MAX_VALUE)
+                .addComponent(Controles, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         FundoLayout.setVerticalGroup(
             FundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 295, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FundoLayout.createSequentialGroup()
+                .addGap(0, 295, Short.MAX_VALUE)
+                .addComponent(Controles, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Fundo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(Fundo, javax.swing.GroupLayout.PREFERRED_SIZE, 632, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,7 +157,7 @@ public class Run extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Run.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-       
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -125,6 +167,8 @@ public class Run extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField Controles;
     public static javax.swing.JPanel Fundo;
+    private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

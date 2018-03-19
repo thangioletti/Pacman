@@ -44,27 +44,34 @@ public class Run extends javax.swing.JFrame {
 
         musica.main(null);
 
-        Tabuleiro tb = new Tabuleiro();                
+        Tabuleiro oTb = new Tabuleiro();                
+        Thread th4 = new Thread(oTb);
+        th4.start();
+        
         Controles.addKeyListener(new KeyAdapter() {  
             public void keyPressed(java.awt.event.KeyEvent e) {  
                 switch(e.getKeyCode()) {
                     case 39: //Direita[
                         oPac.setiDirection(1);
+                        oPac.setiDirectionMove(1);
                         break;
                     case 37: //Esquerda
                         oPac.setiDirection(2);
+                        oPac.setiDirectionMove(2);
                         break;
                     case 38: //Cima
                         oPac.setiDirection(3);
+                        oPac.setiDirectionMove(3);
                         break;
                     case 40: //Baixo
                         oPac.setiDirection(4);
+                        oPac.setiDirectionMove(4);
                         break;                    
                     default:
                         break;
                 }
                     
-                System.out.println(e.getKeyCode());
+                oTb.movePac(oPac.getiDirectionMove());
             };  
         });  
     }

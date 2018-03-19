@@ -5,18 +5,21 @@
  */
 package Pacman;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JLabel;
 
 /**
  *
  * @author angioletti
  */
-public class Tabuleiro {
+public class Tabuleiro implements Runnable{
 
     public final int iLinha = 7;
     public final int iColuna = 20;
 
     public int[][] aMatriz = new int[iLinha][iColuna];
+    public JLabel Black[][] = new JLabel[iLinha][iColuna];
 
     public Tabuleiro() {
 
@@ -26,8 +29,7 @@ public class Tabuleiro {
         * 3 - Espaço com semente
         * 4 - Pacman
         * 5 - Ghost
-         */
-        int iGhost = 0;
+         */        
 
         aMatriz[0][0] = 1;
         aMatriz[0][1] = 1;
@@ -164,9 +166,200 @@ public class Tabuleiro {
         aMatriz[6][15] = 1;
         aMatriz[6][16] = 1;
         aMatriz[6][17] = 1;
-        aMatriz[6][18] = 1;
-
-        int iTop = 0;
+        aMatriz[6][18] = 1;      
+        
+        redo();
+        
+    }
+    
+    public void run(){
+        while (true) {
+            
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            
+            
+        }
+    }
+    
+    public void movePac(int iDirection){        
+        int[] iPos = this.findPac();        
+        
+    /* 1 - Direita
+    * 2 - Esquerda
+    * 3 - Cima
+    * 4 - Baixo */
+        switch(iDirection) {            
+            case 1:
+                this.movePacRight(iPos);
+                break;
+            case 2:
+                this.movePacLeft(iPos);
+                break;
+            case 3:
+                this.movePacUp(iPos);
+                break;
+            case 4:
+                this.movePacDown(iPos);
+                break;
+            default:
+                break;
+        }
+        
+    }
+    
+    public void movePacRight(int[] iPos){        
+        int iLine = iPos[0];
+        int iCol  = iPos[1];
+        
+        int iNewLine = iLine;
+        int iNewCol  = iCol+1;        
+        
+        int iElementoNoCaminho = aMatriz[iNewLine][iNewCol];
+        /* 1 - Parede
+        * 2 - Espaço preto
+        * 3 - Espaço com semente
+        * 4 - Pacman*/
+        switch(iElementoNoCaminho){
+            case 1:
+                //Não meche
+                break;
+            case 2:
+                this.aMatriz[iNewLine][iNewCol] = 4;
+                this.aMatriz[iLine][iCol] = 2;
+                Black[iLine][iCol] = Black[iNewLine][iNewCol];
+                Black[iNewLine][iNewCol] = null;               
+                Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x-26, Black[iLine][iCol].getLocation().y);
+                Run.Pacman.setLocation(Run.Pacman.getLocation().x+26, Run.Pacman.getLocation().y);
+                break;
+            case 3:
+                this.aMatriz[iNewLine][iNewCol] = 5;
+                this.aMatriz[iLine][iCol] = 2;
+                break;
+        }
+        
+    }
+    
+    public void movePacLeft(int[] iPos){        
+        int iLine = iPos[0];
+        int iCol  = iPos[1];
+        
+        int iNewLine = iLine;
+        int iNewCol  = iCol-1;        
+        
+        int iElementoNoCaminho = aMatriz[iNewLine][iNewCol];
+        /* 1 - Parede
+        * 2 - Espaço preto
+        * 3 - Espaço com semente
+        * 4 - Pacman*/
+        switch(iElementoNoCaminho){
+            case 1:
+                //Não meche
+                break;
+            case 2:
+                this.aMatriz[iNewLine][iNewCol] = 4;
+                this.aMatriz[iLine][iCol] = 2;
+                Black[iLine][iCol] = Black[iNewLine][iNewCol];
+                Black[iNewLine][iNewCol] = null;               
+                Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x+26, Black[iLine][iCol].getLocation().y);
+                Run.Pacman.setLocation(Run.Pacman.getLocation().x-26, Run.Pacman.getLocation().y);
+                break;
+            case 3:
+                this.aMatriz[iNewLine][iNewCol] = 5;
+                this.aMatriz[iLine][iCol] = 2;
+                break;
+        }
+        
+    }
+    
+    public void movePacUp(int[] iPos){        
+        int iLine = iPos[0];
+        int iCol  = iPos[1];
+        
+        int iNewLine = iLine-1;
+        int iNewCol  = iCol;        
+        
+        int iElementoNoCaminho = aMatriz[iNewLine][iNewCol];
+        /* 1 - Parede
+        * 2 - Espaço preto
+        * 3 - Espaço com semente
+        * 4 - Pacman*/
+        switch(iElementoNoCaminho){
+            case 1:
+                //Não meche
+                break;
+            case 2:
+                this.aMatriz[iNewLine][iNewCol] = 4;
+                this.aMatriz[iLine][iCol] = 2;
+                Black[iLine][iCol] = Black[iNewLine][iNewCol];
+                Black[iNewLine][iNewCol] = null;               
+                Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x, Black[iLine][iCol].getLocation().y+26);
+                Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y-26);
+                break;
+            case 3:
+                this.aMatriz[iNewLine][iNewCol] = 5;
+                this.aMatriz[iLine][iCol] = 2;
+                break;
+        }
+        
+    }
+    
+    public void movePacDown(int[] iPos){        
+        int iLine = iPos[0];
+        int iCol  = iPos[1];
+        
+        int iNewLine = iLine+1;
+        int iNewCol  = iCol;        
+        
+        int iElementoNoCaminho = aMatriz[iNewLine][iNewCol];
+        /* 1 - Parede
+        * 2 - Espaço preto
+        * 3 - Espaço com semente
+        * 4 - Pacman*/
+        switch(iElementoNoCaminho){
+            case 1:
+                //Não meche
+                break;
+            case 2:
+                this.aMatriz[iNewLine][iNewCol] = 4;
+                this.aMatriz[iLine][iCol] = 2;
+                Black[iLine][iCol] = Black[iNewLine][iNewCol];
+                Black[iNewLine][iNewCol] = null;               
+                Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x, Black[iLine][iCol].getLocation().y-26);
+                Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y+26);
+                break;
+            case 3:
+                this.aMatriz[iNewLine][iNewCol] = 5;
+                this.aMatriz[iLine][iCol] = 2;
+                break;
+        }
+        
+    }
+    
+    public int[] findPac(){
+        int[] iPos = new int[2];
+        
+        for (int iLine = 0; iLine < iLinha; iLine++) {           
+            for (int iCol = 0; iCol < iColuna; iCol++) {
+               if (aMatriz[iLine][iCol] == 4) {
+                   iPos[0] = iLine;
+                   iPos[1] = iCol;
+                   return iPos;
+               }
+            }
+        }
+        
+        return iPos;
+    }
+    
+    public void redo(){
+        
+        int iGhost = 0;        
+        int iTop = 0;        
         for (int iLine = 0; iLine < iLinha; iLine++) {
 
             int iLeft = 0;
@@ -174,25 +367,25 @@ public class Tabuleiro {
                 String sImg = "";
                 if (aMatriz[iLine][iCol] == 1) {
                     sImg = "azul";
-                    JLabel Black = new javax.swing.JLabel();
-                    Black.setSize(26, 26);
-                    Black.setLocation(iLeft, iTop);
-                    Run.Fundo.add(Black);
-                    Black.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
+                    Black[iLine][iCol] = new javax.swing.JLabel();
+                    Black[iLine][iCol].setSize(26, 26);
+                    Black[iLine][iCol].setLocation(iLeft, iTop);
+                    Run.Fundo.add(Black[iLine][iCol]);
+                    Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
                 } else if (aMatriz[iLine][iCol] == 2) {
-                    sImg = "preto";
-                    JLabel Black = new javax.swing.JLabel();
-                    Black.setSize(26, 26);
-                    Black.setLocation(iLeft, iTop);
-                    Run.Fundo.add(Black);
-                    Black.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
+                    sImg = "preto";                    
+                    Black[iLine][iCol] = new javax.swing.JLabel();
+                    Black[iLine][iCol].setSize(26, 26);
+                    Black[iLine][iCol].setLocation(iLeft, iTop);
+                    Run.Fundo.add(Black[iLine][iCol]);
+                    Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
                 } else if (aMatriz[iLine][iCol] == 3) {
                     sImg = "semente";
-                    JLabel Black = new javax.swing.JLabel();
-                    Black.setSize(26, 26);
-                    Black.setLocation(iLeft, iTop);
-                    Run.Fundo.add(Black);
-                    Black.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
+                    Black[iLine][iCol] = new javax.swing.JLabel();
+                    Black[iLine][iCol].setSize(26, 26);
+                    Black[iLine][iCol].setLocation(iLeft, iTop);
+                    Run.Fundo.add(Black[iLine][iCol]);
+                    Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
                 } else if (aMatriz[iLine][iCol] == 4) {
                     sImg = "pac-close";
                     Run.Pacman = new javax.swing.JLabel();
@@ -212,8 +405,7 @@ public class Tabuleiro {
                 iLeft += 26;
             }
             iTop += 26;
-        }
-
+        }        
     }
 
 }

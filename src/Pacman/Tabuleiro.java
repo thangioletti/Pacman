@@ -21,6 +21,7 @@ public class Tabuleiro implements Runnable{
     public int[][] aMatriz = new int[iLinha][iColuna];
     public JLabel Black[][] = new JLabel[iLinha][iColuna];
     
+    public int iPontos = 0;
     public int iMovimentoPac = 0;
     
     public Tabuleiro() {
@@ -178,27 +179,29 @@ public class Tabuleiro implements Runnable{
         while (true) {
             
             try {
-                Thread.sleep(700);
+                Thread.sleep(400);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            movePac(iMovimentoPac);
+            movingPac();
             
         }
     }
     
-    public void movePac(int iDirection){        
-        
-        this.iMovimentoPac = iDirection;
-        
+    public void movePac(int iDirection){                        
+        this.iMovimentoPac = iDirection;                        
+    }
+    
+    public void movingPac() {
+        Run.Pontuacao.setText(iPontos-contaPontos()+" pontos");
         int[] iPos = this.findPac();        
         
         /* 1 - Direita
         * 2 - Esquerda
         * 3 - Cima
         * 4 - Baixo */
-        switch(iDirection) {            
+        switch(this.iMovimentoPac) {            
             case 1:
                 this.movePacRight(iPos);
                 break;
@@ -380,8 +383,23 @@ public class Tabuleiro implements Runnable{
         return iPos;
     }
     
-    public void redo(){
+    public int contaPontos(){
         
+        int iPontos = 0;
+        for (int iLine = 0; iLine < iLinha; iLine++) {           
+            for (int iCol = 0; iCol < iColuna; iCol++) {
+               if (aMatriz[iLine][iCol] == 3) {
+                   iPontos++;
+               }
+            }
+        }
+        
+        return iPontos;
+    }
+    
+    public void redo(){
+         
+        this.iPontos = contaPontos();
         int iGhost = 0;        
         int iTop = 0;        
         for (int iLine = 0; iLine < iLinha; iLine++) {

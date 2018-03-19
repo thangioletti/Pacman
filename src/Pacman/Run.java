@@ -97,6 +97,7 @@ public class Run extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         Fundo = new javax.swing.JPanel();
         Controles = new javax.swing.JTextField();
+        Pontuacao = new javax.swing.JLabel();
 
         jTextField1.setText("jTextField1");
 
@@ -105,6 +106,9 @@ public class Run extends javax.swing.JFrame {
         Fundo.setBackground(new java.awt.Color(0, 0, 0));
         Fundo.setPreferredSize(new java.awt.Dimension(520, 295));
 
+        Pontuacao.setForeground(new java.awt.Color(255, 0, 0));
+        Pontuacao.setText("jLabel1");
+
         javax.swing.GroupLayout FundoLayout = new javax.swing.GroupLayout(Fundo);
         Fundo.setLayout(FundoLayout);
         FundoLayout.setHorizontalGroup(
@@ -112,11 +116,17 @@ public class Run extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FundoLayout.createSequentialGroup()
                 .addGap(0, 632, Short.MAX_VALUE)
                 .addComponent(Controles, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(FundoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(Pontuacao)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         FundoLayout.setVerticalGroup(
             FundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FundoLayout.createSequentialGroup()
-                .addGap(0, 295, Short.MAX_VALUE)
+                .addGap(0, 257, Short.MAX_VALUE)
+                .addComponent(Pontuacao)
+                .addGap(18, 18, 18)
                 .addComponent(Controles, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -174,6 +184,7 @@ public class Run extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField Controles;
     public static javax.swing.JPanel Fundo;
+    public static javax.swing.JLabel Pontuacao;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

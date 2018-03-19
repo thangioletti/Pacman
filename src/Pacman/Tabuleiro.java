@@ -20,7 +20,9 @@ public class Tabuleiro implements Runnable{
 
     public int[][] aMatriz = new int[iLinha][iColuna];
     public JLabel Black[][] = new JLabel[iLinha][iColuna];
-
+    
+    public int iMovimentoPac = 0;
+    
     public Tabuleiro() {
 
         /*VALORES
@@ -176,23 +178,26 @@ public class Tabuleiro implements Runnable{
         while (true) {
             
             try {
-                Thread.sleep(10);
+                Thread.sleep(700);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            
+            movePac(iMovimentoPac);
             
         }
     }
     
     public void movePac(int iDirection){        
+        
+        this.iMovimentoPac = iDirection;
+        
         int[] iPos = this.findPac();        
         
-    /* 1 - Direita
-    * 2 - Esquerda
-    * 3 - Cima
-    * 4 - Baixo */
+        /* 1 - Direita
+        * 2 - Esquerda
+        * 3 - Cima
+        * 4 - Baixo */
         switch(iDirection) {            
             case 1:
                 this.movePacRight(iPos);
@@ -237,11 +242,15 @@ public class Tabuleiro implements Runnable{
                 Run.Pacman.setLocation(Run.Pacman.getLocation().x+26, Run.Pacman.getLocation().y);
                 break;
             case 3:
-                this.aMatriz[iNewLine][iNewCol] = 5;
+                this.aMatriz[iNewLine][iNewCol] = 4;
                 this.aMatriz[iLine][iCol] = 2;
+                Black[iLine][iCol] = Black[iNewLine][iNewCol];
+                Black[iNewLine][iNewCol] = null;    
+                Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
+                Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x-26, Black[iLine][iCol].getLocation().y);
+                Run.Pacman.setLocation(Run.Pacman.getLocation().x+26, Run.Pacman.getLocation().y);
                 break;
-        }
-        
+        }        
     }
     
     public void movePacLeft(int[] iPos){        
@@ -269,8 +278,13 @@ public class Tabuleiro implements Runnable{
                 Run.Pacman.setLocation(Run.Pacman.getLocation().x-26, Run.Pacman.getLocation().y);
                 break;
             case 3:
-                this.aMatriz[iNewLine][iNewCol] = 5;
+                this.aMatriz[iNewLine][iNewCol] = 4;
                 this.aMatriz[iLine][iCol] = 2;
+                Black[iLine][iCol] = Black[iNewLine][iNewCol];
+                Black[iNewLine][iNewCol] = null;               
+                Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
+                Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x+26, Black[iLine][iCol].getLocation().y);
+                Run.Pacman.setLocation(Run.Pacman.getLocation().x-26, Run.Pacman.getLocation().y);
                 break;
         }
         
@@ -301,8 +315,13 @@ public class Tabuleiro implements Runnable{
                 Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y-26);
                 break;
             case 3:
-                this.aMatriz[iNewLine][iNewCol] = 5;
+                this.aMatriz[iNewLine][iNewCol] = 4;
                 this.aMatriz[iLine][iCol] = 2;
+                Black[iLine][iCol] = Black[iNewLine][iNewCol];
+                Black[iNewLine][iNewCol] = null;               
+                Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
+                Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x, Black[iLine][iCol].getLocation().y+26);
+                Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y-26);
                 break;
         }
         
@@ -333,8 +352,13 @@ public class Tabuleiro implements Runnable{
                 Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y+26);
                 break;
             case 3:
-                this.aMatriz[iNewLine][iNewCol] = 5;
-                this.aMatriz[iLine][iCol] = 2;
+                this.aMatriz[iNewLine][iNewCol] = 4;
+                this.aMatriz[iLine][iCol] = 2;                
+                Black[iLine][iCol] = Black[iNewLine][iNewCol];
+                Black[iNewLine][iNewCol] = null;               
+                Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
+                Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x, Black[iLine][iCol].getLocation().y-26);
+                Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y+26);
                 break;
         }
         

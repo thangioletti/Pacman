@@ -28,6 +28,10 @@ public class Run extends javax.swing.JFrame {
     public Run() {
         initComponents();
 
+        Tabuleiro oTb = new Tabuleiro();                
+        Thread th4 = new Thread(oTb);
+        th4.start();
+        
         Pacman oPac = new Pacman(2);
         aGhosts[0] = new Ghost(0, "Pink");
         aGhosts[1] = new Ghost(1, "Red");
@@ -41,12 +45,6 @@ public class Run extends javax.swing.JFrame {
 
         Thread th3 = new Thread(aGhosts[1]);
         th3.start();
-
-        musica.main(null);
-
-        Tabuleiro oTb = new Tabuleiro();                
-        Thread th4 = new Thread(oTb);
-        th4.start();
         
         Controles.addKeyListener(new KeyAdapter() {  
             public void keyPressed(java.awt.event.KeyEvent e) {  

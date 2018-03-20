@@ -19,6 +19,7 @@ public class Run extends javax.swing.JFrame {
 
     public static JLabel Pacman;
     public static JLabel[] Ghost = new JLabel[4];
+    public static Jlayer Musica = new Jlayer();
     /**
      * Creates new form Run
      */
@@ -45,6 +46,10 @@ public class Run extends javax.swing.JFrame {
 
         Thread th3 = new Thread(aGhosts[1]);
         th3.start();
+        
+        
+        Thread th5 = new Thread(Musica);
+        th5.start();
         
         Controles.addKeyListener(new KeyAdapter() {  
             public void keyPressed(java.awt.event.KeyEvent e) {  

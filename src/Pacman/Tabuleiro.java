@@ -245,6 +245,7 @@ public class Tabuleiro implements Runnable{
                 Run.Pacman.setLocation(Run.Pacman.getLocation().x+26, Run.Pacman.getLocation().y);
                 break;
             case 3:
+                Run.Musica.musicaComer();
                 this.aMatriz[iNewLine][iNewCol] = 4;
                 this.aMatriz[iLine][iCol] = 2;
                 Black[iLine][iCol] = Black[iNewLine][iNewCol];
@@ -281,6 +282,7 @@ public class Tabuleiro implements Runnable{
                 Run.Pacman.setLocation(Run.Pacman.getLocation().x-26, Run.Pacman.getLocation().y);
                 break;
             case 3:
+                Run.Musica.musicaComer();
                 this.aMatriz[iNewLine][iNewCol] = 4;
                 this.aMatriz[iLine][iCol] = 2;
                 Black[iLine][iCol] = Black[iNewLine][iNewCol];
@@ -318,6 +320,7 @@ public class Tabuleiro implements Runnable{
                 Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y-26);
                 break;
             case 3:
+                Run.Musica.musicaComer();
                 this.aMatriz[iNewLine][iNewCol] = 4;
                 this.aMatriz[iLine][iCol] = 2;
                 Black[iLine][iCol] = Black[iNewLine][iNewCol];
@@ -355,6 +358,7 @@ public class Tabuleiro implements Runnable{
                 Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y+26);
                 break;
             case 3:
+                Run.Musica.musicaComer();
                 this.aMatriz[iNewLine][iNewCol] = 4;
                 this.aMatriz[iLine][iCol] = 2;                
                 Black[iLine][iCol] = Black[iNewLine][iNewCol];

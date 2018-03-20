@@ -90,10 +90,10 @@ public class Jlayer implements Runnable{
                 BufferedInputStream bis = new BufferedInputStream(fis);
 
                 this.player = new Player(bis);
-                System.out.println("Tocando Musica!");
+               // System.out.println("Tocando Musica!");
 
                 this.player.play();
-                System.out.println("Terminado Musica!");
+               // System.out.println("Terminado Musica!");
 
             } catch (Exception e) {
                 System.out.println("Problema ao tocar Musica" + mp3);

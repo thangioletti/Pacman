@@ -179,11 +179,13 @@ public class Tabuleiro implements Runnable{
         while (true) {
             
             try {
-                Thread.sleep(400);
+                Thread.sleep(300);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            Run.Pontuacao.setText(iPontos-contaPontos()+" pontos");
+            finish();            
             movingPac();
             
         }
@@ -193,8 +195,15 @@ public class Tabuleiro implements Runnable{
         this.iMovimentoPac = iDirection;                        
     }
     
-    public void movingPac() {
-        Run.Pontuacao.setText(iPontos-contaPontos()+" pontos");
+    public void finish() {
+        System.out.println(iPontos);
+        if (contaPontos() == 0) {
+            Run.Pontuacao.setText("Win");
+            Run.Die();
+        };
+    }
+    
+    public void movingPac() {                ;
         int[] iPos = this.findPac();        
         
         /* 1 - Direita

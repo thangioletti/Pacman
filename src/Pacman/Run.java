@@ -20,35 +20,43 @@ public class Run extends javax.swing.JFrame {
     public static JLabel Pacman;
     public static JLabel[] Ghost = new JLabel[4];
     public static Jlayer Musica = new Jlayer();
+    public static Pacman oPac;
+    public static Thread th1;
+    public static Thread th2;
+    public static Thread th3;
+    public static Thread th4;
+    public static Thread th5;
+    
     /**
      * Creates new form Run
      */
 
     static Ghost aGhosts[] = new Ghost[4];
-
+        
     public Run() {
         initComponents();
 
         Tabuleiro oTb = new Tabuleiro();                
-        Thread th4 = new Thread(oTb);
+        
+        th4 = new Thread(oTb);
         th4.start();
         
-        Pacman oPac = new Pacman(2);
+        oPac = new Pacman(2);
+                
         aGhosts[0] = new Ghost(0, "Pink");
         aGhosts[1] = new Ghost(1, "Red");
         Jlayer musica = new Jlayer();
 
-        Thread th1 = new Thread(oPac);
+        th1 = new Thread(oPac);
         th1.start();
 
-        Thread th2 = new Thread(aGhosts[0]);
+        th2 = new Thread(aGhosts[0]);
         th2.start();
 
-        Thread th3 = new Thread(aGhosts[1]);
+        th3 = new Thread(aGhosts[1]);
         th3.start();
         
-        
-        Thread th5 = new Thread(Musica);
+        th5 = new Thread(Musica);
         th5.start();
         
         Controles.addKeyListener(new KeyAdapter() {  
@@ -79,7 +87,13 @@ public class Run extends javax.swing.JFrame {
         });  
     }
     
-    
+    public static void Die() {
+        th1.destroy();
+        th2.destroy();
+        th3.destroy();
+        th4.destroy();
+        th5.destroy();
+    }
  
     public void keyReleased(KeyEvent ke){
         System.out.println(ke.getKeyCode());

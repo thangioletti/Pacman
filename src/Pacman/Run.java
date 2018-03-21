@@ -125,6 +125,7 @@ public class Run extends javax.swing.JFrame {
         Fundo.setBackground(new java.awt.Color(0, 0, 0));
         Fundo.setPreferredSize(new java.awt.Dimension(520, 295));
 
+        Pontuacao.setFont(new java.awt.Font("Consolas", 1, 24)); // NOI18N
         Pontuacao.setForeground(new java.awt.Color(255, 0, 0));
         Pontuacao.setText("jLabel1");
 
@@ -143,9 +144,9 @@ public class Run extends javax.swing.JFrame {
         FundoLayout.setVerticalGroup(
             FundoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, FundoLayout.createSequentialGroup()
-                .addGap(0, 257, Short.MAX_VALUE)
+                .addGap(0, 222, Short.MAX_VALUE)
                 .addComponent(Pontuacao)
-                .addGap(18, 18, 18)
+                .addGap(44, 44, 44)
                 .addComponent(Controles, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 

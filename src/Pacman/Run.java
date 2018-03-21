@@ -92,7 +92,7 @@ public class Run extends javax.swing.JFrame {
         th2.destroy();
         th3.destroy();
         th4.destroy();
-        th5.destroy();
+        th5.destroy();       
     }
  
     public void keyReleased(KeyEvent ke){

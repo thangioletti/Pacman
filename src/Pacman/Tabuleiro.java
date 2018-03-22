@@ -20,15 +20,20 @@ public class Tabuleiro implements Runnable {
     public final int iColuna = 20;
 
     public int[][] aMatriz = new int[iLinha][iColuna];
+    public int[][] aMatrizTabuleiro = new int[iLinha][iColuna];
+
     public JLabel Black[][] = new JLabel[iLinha][iColuna];
 
     public int iPontos = 0;
     public int iMovimentoPac = 0;
-    
+    public int[] iMovimentoGhost;
+
     public Random oRand = new Random();
-    
+
     public Tabuleiro() {
 
+        iMovimentoGhost = new int[7];
+        iMovimentoGhost[5] = 4;
         /*VALORES
         * 1 - Parede
         * 2 - Espaço preto
@@ -95,7 +100,7 @@ public class Tabuleiro implements Runnable {
         aMatriz[0][12] = 1;
         aMatriz[1][7] = 1;
         aMatriz[1][8] = 2;
-        aMatriz[1][9] = 5;
+        aMatriz[1][9] = 2;
         aMatriz[1][10] = 2;
         aMatriz[1][11] = 1;
         aMatriz[1][12] = 2;
@@ -107,7 +112,7 @@ public class Tabuleiro implements Runnable {
         aMatriz[2][12] = 2;
         aMatriz[3][7] = 2;
         aMatriz[3][8] = 2;
-        aMatriz[3][9] = 2;
+        aMatriz[3][9] = 5;
         aMatriz[3][10] = 4;
         aMatriz[3][11] = 2;
         aMatriz[3][12] = 2;
@@ -174,6 +179,16 @@ public class Tabuleiro implements Runnable {
         aMatriz[6][17] = 1;
         aMatriz[6][18] = 1;
 
+        for (int iLine = 0; iLine < iLinha; iLine++) {
+            for (int iCol = 0; iCol < iColuna; iCol++) {
+                int iElemento = aMatriz[iLine][iCol];
+                if (iElemento > 3) {
+                    iElemento = 2;
+                }
+                aMatrizTabuleiro[iLine][iCol] = iElemento;
+            }
+        }
+        
         redo();
 
     }
@@ -191,8 +206,8 @@ public class Tabuleiro implements Runnable {
             finish();
             movingPac(); //Move pacman
             movingGhost(5);
+            //movingGhost(6);
         }
-        
 
     }
 
@@ -201,7 +216,6 @@ public class Tabuleiro implements Runnable {
     }
 
     public void finish() {
-        System.out.println(iPontos);
         if (contaPontos() == 0) {
             Run.Pontuacao.setText("Win");
             Run.Die();
@@ -213,7 +227,7 @@ public class Tabuleiro implements Runnable {
     }
 
     public void movingGhost(int iGhost) {
-        this.moving(iGhost, (oRand.nextInt(4)+1));
+        this.moving(iGhost, this.iMovimentoGhost[iGhost]);
     }
 
     public void moving(int iPersonagem, int iDirection) {
@@ -242,6 +256,24 @@ public class Tabuleiro implements Runnable {
 
     }
 
+    //Muda a direção que um Ghost vai andar de modo randomico
+    public void moveGhostRand(int iGhost) {
+        switch (this.iMovimentoGhost[iGhost]) {
+            case 1:
+                this.iMovimentoGhost[iGhost] = 4;
+                break;
+            case 2:
+                this.iMovimentoGhost[iGhost] = 3;
+                break;
+            case 3:
+                this.iMovimentoGhost[iGhost] = 1;
+                break;
+            case 4:
+                this.iMovimentoGhost[iGhost] = 2;
+                break;
+        }
+    }
+
     public void moveRight(int iPersonagem, int[] iPos) {
 
         int iLine = iPos[0];
@@ -258,6 +290,10 @@ public class Tabuleiro implements Runnable {
         switch (iElementoNoCaminho) {
             case 1:
                 //Não meche
+                //Se for um Ghost muda a direção
+                if (iPersonagem > 4) {
+                    moveGhostRand(iPersonagem);
+                }
                 break;
             case 2:
                 this.aMatriz[iNewLine][iNewCol] = iPersonagem;
@@ -272,18 +308,35 @@ public class Tabuleiro implements Runnable {
                 }
                 break;
             case 3:
+                this.aMatriz[iNewLine][iNewCol] = iPersonagem;
                 if (iPersonagem == 4) {
                     Run.Musica.musicaComer();
-                    this.aMatriz[iNewLine][iNewCol] = iPersonagem;
                     this.aMatriz[iLine][iCol] = 2;
                     Black[iLine][iCol] = Black[iNewLine][iNewCol];
                     Black[iNewLine][iNewCol] = null;
                     Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
                     Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x - 26, Black[iLine][iCol].getLocation().y);
                     Run.Pacman.setLocation(Run.Pacman.getLocation().x + 26, Run.Pacman.getLocation().y);
+                } else {
+                    
+                    int[] iPosMatriz = new int[4];
+                    int[] iDirection = new int[4];
+                    
+                    iPosMatriz[0] = iLine;
+                    iPosMatriz[1] = iCol;
+                    iPosMatriz[2] = iNewLine;
+                    iPosMatriz[3] = iNewCol;
+                                                            
+                    iDirection[0] = Run.Ghost[iPersonagem - 5].getLocation().x+26;
+                    iDirection[1] = Run.Ghost[iPersonagem - 5].getLocation().y;
+                    iDirection[2] = Black[iNewLine][iNewCol].getLocation().x-26;
+                    iDirection[3] = Black[iNewLine][iNewCol].getLocation().y;
+                    
+                    moverGhost(iPersonagem, iPosMatriz, iDirection);
                 }
                 break;
             default:
+                //ESPERA
                 break;
         }
     }
@@ -303,6 +356,10 @@ public class Tabuleiro implements Runnable {
         switch (iElementoNoCaminho) {
             case 1:
                 //Não meche
+                //Se for um Ghost muda a direção
+                if (iPersonagem > 4) {
+                    moveGhostRand(iPersonagem);
+                }
                 break;
             case 2:
                 this.aMatriz[iNewLine][iNewCol] = iPersonagem;
@@ -317,14 +374,31 @@ public class Tabuleiro implements Runnable {
                 }
                 break;
             case 3:
-                Run.Musica.musicaComer();
-                this.aMatriz[iNewLine][iNewCol] = 4;
-                this.aMatriz[iLine][iCol] = 2;
-                Black[iLine][iCol] = Black[iNewLine][iNewCol];
-                Black[iNewLine][iNewCol] = null;
-                Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
-                Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x + 26, Black[iLine][iCol].getLocation().y);
-                Run.Pacman.setLocation(Run.Pacman.getLocation().x - 26, Run.Pacman.getLocation().y);
+                this.aMatriz[iNewLine][iNewCol] = iPersonagem;
+                if (iPersonagem == 4) {
+                    Run.Musica.musicaComer();
+                    this.aMatriz[iLine][iCol] = 2;
+                    Black[iLine][iCol] = Black[iNewLine][iNewCol];
+                    Black[iNewLine][iNewCol] = null;
+                    Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
+                    Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x + 26, Black[iLine][iCol].getLocation().y);
+                    Run.Pacman.setLocation(Run.Pacman.getLocation().x - 26, Run.Pacman.getLocation().y);
+                } else {
+                    int[] iPosMatriz = new int[4];
+                    int[] iDirection = new int[4];
+                    
+                    iPosMatriz[0] = iLine;
+                    iPosMatriz[1] = iCol;
+                    iPosMatriz[2] = iNewLine;
+                    iPosMatriz[3] = iNewCol;
+                                                            
+                    iDirection[0] = Run.Ghost[iPersonagem - 5].getLocation().x-26;
+                    iDirection[1] = Run.Ghost[iPersonagem - 5].getLocation().y;
+                    iDirection[2] = Black[iNewLine][iNewCol].getLocation().x+26;
+                    iDirection[3] = Black[iNewLine][iNewCol].getLocation().y;
+                    
+                    moverGhost(iPersonagem, iPosMatriz, iDirection);
+                }
                 break;
             default:
                 break;
@@ -347,6 +421,10 @@ public class Tabuleiro implements Runnable {
         switch (iElementoNoCaminho) {
             case 1:
                 //Não meche
+                //Se for um Ghost muda a direção
+                if (iPersonagem > 4) {
+                    moveGhostRand(iPersonagem);
+                }
                 break;
             case 2:
                 this.aMatriz[iNewLine][iNewCol] = iPersonagem;
@@ -356,25 +434,78 @@ public class Tabuleiro implements Runnable {
                 Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x, Black[iLine][iCol].getLocation().y + 26);
                 if (iPersonagem == 4) {
                     Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y - 26);
-                } else if (iPersonagem == 5) {
+                } else if (iPersonagem >= 5) {
                     Run.Ghost[0].setLocation(Run.Ghost[0].getLocation().x, Run.Ghost[0].getLocation().y - 26);
                 }
-                
                 break;
-            case 3:
-                Run.Musica.musicaComer();
-                this.aMatriz[iNewLine][iNewCol] = 4;
-                this.aMatriz[iLine][iCol] = 2;
-                Black[iLine][iCol] = Black[iNewLine][iNewCol];
-                Black[iNewLine][iNewCol] = null;
-                Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
-                Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x, Black[iLine][iCol].getLocation().y + 26);
-                Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y - 26);
+            case 3:                
+                if (iPersonagem == 4) {
+                    this.aMatriz[iNewLine][iNewCol] = iPersonagem;
+                    Run.Musica.musicaComer();
+                    this.aMatriz[iLine][iCol] = 2;
+                    Black[iLine][iCol] = Black[iNewLine][iNewCol];
+                    Black[iNewLine][iNewCol] = null;
+                    Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
+                    Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x, Black[iLine][iCol].getLocation().y + 26);
+                    Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y - 26);
+                } else {
+                    
+                    int[] iPosMatriz = new int[4];
+                    int[] iDirection = new int[4];
+                    
+                    iPosMatriz[0] = iLine;
+                    iPosMatriz[1] = iCol;
+                    iPosMatriz[2] = iNewLine;
+                    iPosMatriz[3] = iNewCol;
+                                                            
+                    iDirection[0] = Run.Ghost[iPersonagem - 5].getLocation().x;
+                    iDirection[1] = Run.Ghost[iPersonagem - 5].getLocation().y-26;
+                    iDirection[2] = Black[iNewLine][iNewCol].getLocation().x;
+                    iDirection[3] = Black[iNewLine][iNewCol].getLocation().y+26;
+                    
+                    moverGhost(iPersonagem, iPosMatriz, iDirection);
+                }
                 break;
             default:
                 break;
         }
 
+    }
+
+    public void moverGhost(int iPersonagem, int[] iPosMatriz, int[] iDirection) {
+        
+        int iLine    = iPosMatriz[0];
+        int iCol     = iPosMatriz[1];
+        int iNewLine = iPosMatriz[2];
+        int iNewCol  = iPosMatriz[3];
+        
+        int iXGhost = iDirection[0];
+        int iYGhost = iDirection[1];
+        int iXLabel = iDirection[2];
+        int iYLabel = iDirection[3];
+                
+        //COLOCA O PERSONAGEM NA NOVA POSIÇÃO
+        this.aMatriz[iNewLine][iNewCol] = iPersonagem;
+        
+        //NO LUGAR EM QUE ELE ESTAVA É COLOCADO O ELEMENTO ANTERIOR
+        System.out.println(iLine);
+        System.out.println(iCol);
+        this.aMatriz[iLine][iCol] = aMatrizTabuleiro[iLine][iCol];
+        System.out.println(aMatrizTabuleiro[iLine][iCol]);
+        
+        //SUBSTITUI O LABEL PARA A POSIÇÃO NOVA
+        Black[iLine][iCol] = Black[iNewLine][iNewCol];
+        Black[iNewLine][iNewCol] = null;
+        
+        //
+        if (aMatrizTabuleiro[iLine][iLine] == 2) {
+            Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
+        } else if (aMatrizTabuleiro[iLine][iCol] == 3) {
+            Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
+        }
+        
+        Black[iLine][iCol].setLocation(iXLabel, iYLabel);
+        Run.Ghost[iPersonagem - 5].setLocation(iXGhost, iYGhost);
     }
 
     public void moveDown(int iPersonagem, int[] iPos) {
@@ -392,28 +523,49 @@ public class Tabuleiro implements Runnable {
         switch (iElementoNoCaminho) {
             case 1:
                 //Não meche
+                //Se for um Ghost muda a direção
+                if (iPersonagem > 4) {
+                    moveGhostRand(iPersonagem);
+                }
                 break;
             case 2:
-                this.aMatriz[iNewLine][iNewCol] = 4;
+                this.aMatriz[iNewLine][iNewCol] = iPersonagem;
                 this.aMatriz[iLine][iCol] = 2;
                 Black[iLine][iCol] = Black[iNewLine][iNewCol];
                 Black[iNewLine][iNewCol] = null;
                 Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x, Black[iLine][iCol].getLocation().y - 26);
                 if (iPersonagem == 4) {
                     Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y + 26);
-                } else if (iPersonagem == 5) {
+                } else if (iPersonagem >= 5) {
                     Run.Ghost[0].setLocation(Run.Ghost[0].getLocation().x, Run.Ghost[0].getLocation().y + 26);
-                }                
+                }
                 break;
             case 3:
-                Run.Musica.musicaComer();
-                this.aMatriz[iNewLine][iNewCol] = 4;
-                this.aMatriz[iLine][iCol] = 2;
-                Black[iLine][iCol] = Black[iNewLine][iNewCol];
-                Black[iNewLine][iNewCol] = null;
-                Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
-                Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x, Black[iLine][iCol].getLocation().y - 26);
-                Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y + 26);
+                this.aMatriz[iNewLine][iNewCol] = iPersonagem;
+                if (iPersonagem == 4) {
+                    Run.Musica.musicaComer();
+                    this.aMatriz[iLine][iCol] = 2;
+                    Black[iLine][iCol] = Black[iNewLine][iNewCol];
+                    Black[iNewLine][iNewCol] = null;
+                    Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
+                    Black[iLine][iCol].setLocation(Black[iLine][iCol].getLocation().x, Black[iLine][iCol].getLocation().y - 26);
+                    Run.Pacman.setLocation(Run.Pacman.getLocation().x, Run.Pacman.getLocation().y + 26);
+                } else {
+                    int[] iPosMatriz = new int[4];
+                    int[] iDirection = new int[4];
+                    
+                    iPosMatriz[0] = iLine;
+                    iPosMatriz[1] = iCol;
+                    iPosMatriz[2] = iNewLine;
+                    iPosMatriz[3] = iNewCol;
+                                                            
+                    iDirection[0] = Run.Ghost[iPersonagem - 5].getLocation().x;
+                    iDirection[1] = Run.Ghost[iPersonagem - 5].getLocation().y+26;
+                    iDirection[2] = Black[iNewLine][iNewCol].getLocation().x;
+                    iDirection[3] = Black[iNewLine][iNewCol].getLocation().y-26;
+                    
+                    moverGhost(iPersonagem, iPosMatriz, iDirection);
+                }
                 break;
             default:
                 break;
@@ -489,7 +641,7 @@ public class Tabuleiro implements Runnable {
                     Run.Pacman.setLocation(iLeft, iTop);
                     Run.Fundo.add(Run.Pacman);
                     Run.Pacman.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
-                } else if (aMatriz[iLine][iCol] == 5) {
+                } else if (aMatriz[iLine][iCol] >= 5) {
                     Run.Ghost[iGhost] = new javax.swing.JLabel();
                     Run.Ghost[iGhost].setSize(26, 26);
                     Run.Ghost[iGhost].setLocation(iLeft, iTop);

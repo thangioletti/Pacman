@@ -34,7 +34,7 @@ public class Tabuleiro implements Runnable {
 
         iMovimentoGhost = new int[7];
         iMovimentoGhost[5] = 2;
-        iMovimentoGhost[6] = 1;
+        //iMovimentoGhost[6] = 1;
         /*VALORES
         * 1 - Parede
         * 2 - Espaço preto
@@ -199,7 +199,7 @@ public class Tabuleiro implements Runnable {
     }
     
     public void doArrayMoedas() {
-        this.aMoedas = new String[contaPontos()];
+        this.aMoedas = new String[contaPontos(true)];
         
         int i = 0;
         for (int iLine = 0; iLine < iLinha; iLine++) {           
@@ -221,7 +221,7 @@ public class Tabuleiro implements Runnable {
                 Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-            Run.Pontuacao.setText(iPontos - contaPontos() + " pontos");
+            Run.Pontuacao.setText(iPontos - contaPontos(false) + " pontos");
             finish();
             movingPac(); //Move pacman
             movingGhost(5);
@@ -231,7 +231,7 @@ public class Tabuleiro implements Runnable {
     }
 
     public void perdeu(){
-        if (contaPontos() > 0) {
+        if (contaPontos(false) > 0) {
             Run.Pontuacao.setText("Perdeu");
             Run.Musica.musicaPerdeu();            
             JOptionPane.showMessageDialog(null, "Você perdeu");
@@ -239,7 +239,7 @@ public class Tabuleiro implements Runnable {
         }
     }
     public void finish() {                
-        if (contaPontos() == 0) {
+        if (contaPontos(false) == 0) {
             Run.Pontuacao.setText("Win");            
             Run.Musica.musicaVenceu();
             JOptionPane.showMessageDialog(null, "Você venceu");
@@ -278,8 +278,12 @@ public class Tabuleiro implements Runnable {
                 if (iPersonagem == 4) {
                     this.movePacmanMoeda(aPosition);
                 } else {
-                    this.moveGhostMoeda(iPersonagem, aPosition);
+                   //GHOST utiliza o mesmo método de mover simples caso tenha moedas
+                   this.movePersonagemBlocoVazio(iPersonagem, aPosition);
                 }
+                break;
+            case 4:
+                this.perdeu();
                 break;
             default:
                 if (iPersonagem == 4) {
@@ -360,7 +364,7 @@ public class Tabuleiro implements Runnable {
                     this.aMatriz[iLine][iCol] = 3;
                 } else {
                     this.aMatriz[iLine][iCol] = 2;
-                }
+                }                                
             }
 
         }
@@ -377,7 +381,14 @@ public class Tabuleiro implements Runnable {
             int iLocationLabel[] = new int[2];
             iLocationLabel[0] = Black[iLine][iCol].getLocation().x+aPosition[6];//X
             iLocationLabel[1] = Black[iLine][iCol].getLocation().y+aPosition[7];//Y
-            Black[iLine][iCol].setLocation(iLocationLabel[0], iLocationLabel[1]);            
+            Black[iLine][iCol].setLocation(iLocationLabel[0], iLocationLabel[1]); 
+            
+            //Caso GHOST se tiver moeda mantem a moeda
+            if (!this.hasMoeda(iLine, iCol)) {
+              Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));                    
+            } else {
+              Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/semente.png")));                    
+            }
         }
         
         {
@@ -421,34 +432,6 @@ public class Tabuleiro implements Runnable {
         
     }
     
-     //Método que faz a movimentação do Ghost sobre a moeda
-    public void moveGhostMoeda(int iGhost, int[] aPosition){
-            
-        {
-          //Troca a imagem da moeda por um campo vazio
-          int iNewLine    = aPosition[0];
-          int iLine    = aPosition[2];
-          int iNewCol     = aPosition[1];
-          int iCol     = aPosition[3];
-          
-          this.movePersonagem(iGhost, aPosition);//Metodo que faz a movimentação
-
-                  
-          if (this.hasMoeda(iNewLine, iNewCol) && !this.hasMoeda(iLine, iCol)) {
-            Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));                    
-          }
-          
-          if (!this.hasMoeda(iNewLine, iNewCol) && this.hasMoeda(iLine, iCol)) {
-            Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/semente.png")));                    
-          }
-          
-          
-        }
-             
-        
-            
-    }
-    
     //Retorna valor random
     public static int getRandom(int[] array) {
         int rnd = new Random().nextInt(array.length);
@@ -464,22 +447,26 @@ public class Tabuleiro implements Runnable {
             case 1:
                 aMovimentosPossiveis[0] = 3;
                 aMovimentosPossiveis[1] = 4;
+                this.iMovimentoGhost[iGhost] = getRandom(aMovimentosPossiveis);
                 break;
             case 2:
                 aMovimentosPossiveis[0] = 3;
                 aMovimentosPossiveis[1] = 4;
+                this.iMovimentoGhost[iGhost] = getRandom(aMovimentosPossiveis);
                 break;
             case 3:
                 aMovimentosPossiveis[0] = 1;
                 aMovimentosPossiveis[1] = 2;
+                this.iMovimentoGhost[iGhost] = getRandom(aMovimentosPossiveis);
                 break;
             case 4:
                 aMovimentosPossiveis[0] = 1;
                 aMovimentosPossiveis[1] = 2;
+                this.iMovimentoGhost[iGhost] = getRandom(aMovimentosPossiveis);
                 break;
         }
         
-        this.iMovimentoGhost[iGhost] = getRandom(aMovimentosPossiveis);
+        
     }        
     
      public void printMatriz(int[][] aMatrizMostrar){        
@@ -509,13 +496,17 @@ public class Tabuleiro implements Runnable {
         return iPos;
     }
 
-    public int contaPontos() {
+    public int contaPontos(boolean bInicio) {
 
         int iPontos = 0;
         for (int iLine = 0; iLine < iLinha; iLine++) {
             for (int iCol = 0; iCol < iColuna; iCol++) {
                 if (aMatriz[iLine][iCol] == 3) {
                     iPontos++;
+                } else if (!bInicio) {
+                    if (this.hasMoeda(iLine, iCol)) {
+                        iPontos++;
+                    }
                 }
             }
         }
@@ -525,7 +516,7 @@ public class Tabuleiro implements Runnable {
 
     public void montaTabuleiro() {
 
-        this.iPontos = contaPontos();
+        this.iPontos = contaPontos(false);
         int iGhost = 0;
         int iTop = 0;
         for (int iLine = 0; iLine < iLinha; iLine++) {

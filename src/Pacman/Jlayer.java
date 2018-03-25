@@ -13,7 +13,9 @@ import java.util.logging.Logger;
 import javazoom.jl.player.Player;
 
 public class Jlayer implements Runnable{    
-
+    
+    public static boolean bStart = true;
+    
     public static void musicaInicio() {
         String path = "src/Pacman/sound/beginning.mp3";
         File mp3File = new File(path);
@@ -39,6 +41,7 @@ public class Jlayer implements Runnable{
     }
     
     public static void musicaPerdeu(){
+        Jlayer.bStart = false;
         String path = "src/Pacman/sound/death.mp3";
         File mp3File = new File(path);
         MP3Musica musica = new MP3Musica();
@@ -47,6 +50,7 @@ public class Jlayer implements Runnable{
     }
     
     public static void musicaVenceu(){
+        Jlayer.bStart = false;
         String path = "src/Pacman/sound/intermission.mp3";
         File mp3File = new File(path);
         MP3Musica musica = new MP3Musica();
@@ -62,7 +66,7 @@ public class Jlayer implements Runnable{
         } catch (InterruptedException ex) {
             Logger.getLogger(Jlayer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        while (true) {
+        while (this.bStart) {
             musicaFundo();
             try {
                 Thread.sleep(700);

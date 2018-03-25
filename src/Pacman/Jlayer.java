@@ -37,6 +37,23 @@ public class Jlayer implements Runnable{
         musica.tocar(mp3File);
         musica.start();
     }
+    
+    public static void musicaPerdeu(){
+        String path = "src/Pacman/sound/death.mp3";
+        File mp3File = new File(path);
+        MP3Musica musica = new MP3Musica();
+        musica.tocar(mp3File);
+        musica.start();
+    }
+    
+    public static void musicaVenceu(){
+        String path = "src/Pacman/sound/intermission.mp3";
+        File mp3File = new File(path);
+        MP3Musica musica = new MP3Musica();
+        musica.tocar(mp3File);
+        musica.start();
+    }
+    
 
     public void run() {
         musicaInicio();

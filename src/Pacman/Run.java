@@ -41,7 +41,7 @@ public class Run extends javax.swing.JFrame {
         th4 = new Thread(oTb);
         th4.start();
         
-        oPac = new Pacman(2);
+        oPac = new Pacman(1);
                 
         aGhosts[0] = new Ghost(0, "Pink");
         aGhosts[1] = new Ghost(1, "Red");
@@ -82,7 +82,6 @@ public class Run extends javax.swing.JFrame {
                         break;
                 }
                     
-                oTb.movePac(oPac.getiDirectionMove());
             };  
         });  
     }

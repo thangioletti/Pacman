@@ -43,8 +43,7 @@ public class Run extends javax.swing.JFrame {
         
         oPac = new Pacman(1);
                 
-        aGhosts[0] = new Ghost(0, "Pink");
-        aGhosts[1] = new Ghost(1, "Red");
+        aGhosts[0] = new Ghost(0, "Red");
         Jlayer musica = new Jlayer();
 
         th1 = new Thread(oPac);
@@ -52,9 +51,6 @@ public class Run extends javax.swing.JFrame {
 
         th2 = new Thread(aGhosts[0]);
         th2.start();
-
-        th3 = new Thread(aGhosts[1]);
-        th3.start();
         
         th5 = new Thread(Musica);
         th5.start();

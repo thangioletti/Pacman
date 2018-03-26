@@ -22,7 +22,7 @@ public class Tabuleiro implements Runnable {
 
     public int[][] aMatriz = new int[iLinha][iColuna];
     public String[] aMoedas;
-    
+
     public JLabel Black[][] = new JLabel[iLinha][iColuna];
 
     public int iPontos = 0;
@@ -33,8 +33,7 @@ public class Tabuleiro implements Runnable {
     public Tabuleiro() {
 
         iMovimentoGhost = new int[7];
-        iMovimentoGhost[5] = 2;
-        //iMovimentoGhost[6] = 1;
+        iMovimentoGhost[5] = 4;
         /*VALORES
         * 1 - Parede
         * 2 - Espaço preto
@@ -75,7 +74,7 @@ public class Tabuleiro implements Runnable {
         aMatriz[4][1] = 2;
         aMatriz[4][2] = 1;
         aMatriz[4][3] = 1;
-        aMatriz[4][4] = 6;
+        aMatriz[4][4] = 2;
         aMatriz[4][5] = 1;
         aMatriz[4][6] = 3;
         aMatriz[5][0] = 1;
@@ -101,7 +100,7 @@ public class Tabuleiro implements Runnable {
         aMatriz[0][12] = 1;
         aMatriz[1][7] = 1;
         aMatriz[1][8] = 2;
-        aMatriz[1][9] = 2;
+        aMatriz[1][9] = 5;
         aMatriz[1][10] = 2;
         aMatriz[1][11] = 1;
         aMatriz[1][12] = 2;
@@ -113,7 +112,7 @@ public class Tabuleiro implements Runnable {
         aMatriz[2][12] = 2;
         aMatriz[3][7] = 2;
         aMatriz[3][8] = 2;
-        aMatriz[3][9] = 5;
+        aMatriz[3][9] = 2;
         aMatriz[3][10] = 4;
         aMatriz[3][11] = 2;
         aMatriz[3][12] = 2;
@@ -179,37 +178,36 @@ public class Tabuleiro implements Runnable {
         aMatriz[6][16] = 1;
         aMatriz[6][17] = 1;
         aMatriz[6][18] = 1;
-        
-        
+
         this.doArrayMoedas();
         this.montaTabuleiro();
 
     }
-    
-    public boolean hasMoeda(int iLine, int iCol) {       
-        String sSearch = iLine+","+iCol;
-        
-        for(String sPos: this.aMoedas){
+
+    public boolean hasMoeda(int iLine, int iCol) {
+        String sSearch = iLine + "," + iCol;
+
+        for (String sPos : this.aMoedas) {
             if (sPos.equals(sSearch)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     public void doArrayMoedas() {
         this.aMoedas = new String[contaPontos(true)];
-        
+
         int i = 0;
-        for (int iLine = 0; iLine < iLinha; iLine++) {           
+        for (int iLine = 0; iLine < iLinha; iLine++) {
             for (int iCol = 0; iCol < iColuna; iCol++) {
                 if (aMatriz[iLine][iCol] == 3) {
-                    this.aMoedas[i] = iLine+","+iCol;
+                    this.aMoedas[i] = iLine + "," + iCol;
                     i++;
                 }
             }
-        }        
+        }
     }
 
     public void run() {
@@ -225,27 +223,27 @@ public class Tabuleiro implements Runnable {
             finish();
             movingPac(); //Move pacman
             movingGhost(5);
-            movingGhost(6);
         }
 
     }
 
-    public void perdeu(){
+    public void perdeu() {
         if (contaPontos(false) > 0) {
             Run.Pontuacao.setText("Perdeu");
-            Run.Musica.musicaPerdeu();            
+            Run.Musica.musicaPerdeu();
             JOptionPane.showMessageDialog(null, "Você perdeu");
             System.exit(1);
         }
     }
-    public void finish() {                
+
+    public void finish() {
         if (contaPontos(false) == 0) {
-            Run.Pontuacao.setText("Win");            
+            Run.Pontuacao.setText("Win");
             Run.Musica.musicaVenceu();
             JOptionPane.showMessageDialog(null, "Você venceu");
             System.exit(1);
-        };                
-        
+        };
+
     }
 
     public void movingPac() {
@@ -260,7 +258,7 @@ public class Tabuleiro implements Runnable {
         int aPos[] = this.findPersonagem(iPersonagem);
         int aPosition[] = this.paramsDirection(iDirection, aPos);
         int iElementoNoCaminho = aMatriz[aPosition[0]][aPosition[1]];
-        
+
         /* 1 - Direita
         * 2 - Esquerda
         * 3 - Cima
@@ -278,8 +276,8 @@ public class Tabuleiro implements Runnable {
                 if (iPersonagem == 4) {
                     this.movePacmanMoeda(aPosition);
                 } else {
-                   //GHOST utiliza o mesmo método de mover simples caso tenha moedas
-                   this.movePersonagemBlocoVazio(iPersonagem, aPosition);
+                    //GHOST utiliza o mesmo método de mover simples caso tenha moedas
+                    this.movePersonagemBlocoVazio(iPersonagem, aPosition);
                 }
                 break;
             case 4:
@@ -295,66 +293,64 @@ public class Tabuleiro implements Runnable {
         }
 
     }
-    
+
     //RETORNA PARAMETROS DE MOVIMENTO TANTO LABEL QUANTO MATRIZES
     public int[] paramsDirection(int iDirection, int[] aPos) {
-        
-        int aPosition[] = new int[8]; 
-        
+
+        int aPosition[] = new int[8];
+
         //0 e 1 são do personagem
         aPosition[0] = aPos[0];//LINHA
         aPosition[1] = aPos[1];//COLUNA
-        
+
         //2 e 3 são o label onde ele estava
         aPosition[2] = aPos[0];
         aPosition[3] = aPos[1];
-        
+
         //FATORES
         //4 e 5 são os lugares onde ele vai ir
         aPosition[4] = 0; //X
         aPosition[5] = 0; //Y
-                        
+
         //ABAIXO ALTERA O POSICIONAMENTO
         switch (iDirection) {
             case 1: //Right                        
-                aPosition[1] = aPosition[1]+1;
+                aPosition[1] = aPosition[1] + 1;
                 aPosition[4] = 26;
                 break;
             case 2: //Left
-                aPosition[1] = aPosition[1]-1;
+                aPosition[1] = aPosition[1] - 1;
                 aPosition[4] = -26;
                 break;
             case 3: //Up
-                aPosition[0] = aPosition[0]-1;
+                aPosition[0] = aPosition[0] - 1;
                 aPosition[5] = -26;
                 break;
             case 4: //Down
-                aPosition[0] = aPosition[0]+1;
+                aPosition[0] = aPosition[0] + 1;
                 aPosition[5] = 26;
                 break;
         }
 
         //6 e 7 são o oposto do 4 e 5
-        aPosition[6] = aPosition[4]*-1;
-        aPosition[7] = aPosition[5]*-1;
-                
+        aPosition[6] = aPosition[4] * -1;
+        aPosition[7] = aPosition[5] * -1;
+
         return aPosition;
     }
-    
-    
-    
+
     //Método que faz a movimentação genérica dos personagens
-    public void movePersonagem(int iPersonagem, int[] aPosition) {                
-        
+    public void movePersonagem(int iPersonagem, int[] aPosition) {
+
         int iNewLine = aPosition[0];
-        int iNewCol  = aPosition[1];
-        int iLine    = aPosition[2];
-        int iCol     = aPosition[3];
-        
+        int iNewCol = aPosition[1];
+        int iLine = aPosition[2];
+        int iCol = aPosition[3];
+
         {
             //Altera a matriz com os personagens
             this.aMatriz[iNewLine][iNewCol] = iPersonagem;
-            
+
             if (iPersonagem == 4) {
                 //Caso for o pacman bota um espaço vazio no lugar
                 this.aMatriz[iLine][iCol] = 2;
@@ -364,85 +360,86 @@ public class Tabuleiro implements Runnable {
                     this.aMatriz[iLine][iCol] = 3;
                 } else {
                     this.aMatriz[iLine][iCol] = 2;
-                }                                
+                }
             }
 
         }
-       
+
         {
             //Altera a matriz com os labels
             Black[iLine][iCol] = Black[iNewLine][iNewCol];
             Black[iNewLine][iNewCol] = null;
-            
+
         }
-                
+
         {
             //Muda posicionamento dos em branco
             int iLocationLabel[] = new int[2];
-            iLocationLabel[0] = Black[iLine][iCol].getLocation().x+aPosition[6];//X
-            iLocationLabel[1] = Black[iLine][iCol].getLocation().y+aPosition[7];//Y
-            Black[iLine][iCol].setLocation(iLocationLabel[0], iLocationLabel[1]); 
-            
+            iLocationLabel[0] = Black[iLine][iCol].getLocation().x + aPosition[6];//X
+            iLocationLabel[1] = Black[iLine][iCol].getLocation().y + aPosition[7];//Y
+            Black[iLine][iCol].setLocation(iLocationLabel[0], iLocationLabel[1]);
+
             //Caso GHOST se tiver moeda mantem a moeda
             if (!this.hasMoeda(iLine, iCol)) {
-              Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));                    
+                Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
             } else {
-              Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/semente.png")));                    
+                Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/semente.png")));
             }
         }
-        
+
         {
             //Muda posicionamento do personagem
             int iLocationLabel[] = new int[2];
-            
+
             if (iPersonagem == 4) {
-                iLocationLabel[0] = Run.Pacman.getLocation().x+aPosition[4];//X
-                iLocationLabel[1] = Run.Pacman.getLocation().y+aPosition[5];//Y
+                iLocationLabel[0] = Run.Pacman.getLocation().x + aPosition[4];//X
+                iLocationLabel[1] = Run.Pacman.getLocation().y + aPosition[5];//Y
                 Run.Pacman.setLocation(iLocationLabel[0], iLocationLabel[1]);
             } else {
-                int iPosGhost = iPersonagem-5;
-                iLocationLabel[0] = Run.Ghost[iPosGhost].getLocation().x+aPosition[4];//X
-                iLocationLabel[1] = Run.Ghost[iPosGhost].getLocation().y+aPosition[5];//Y
+                int iPosGhost = iPersonagem - 5;
+                iLocationLabel[0] = Run.Ghost[iPosGhost].getLocation().x + aPosition[4];//X
+                iLocationLabel[1] = Run.Ghost[iPosGhost].getLocation().y + aPosition[5];//Y
                 Run.Ghost[iPosGhost].setLocation(iLocationLabel[0], iLocationLabel[1]);
             }
         }
-                
+
     }
-    
+
     //Método que faz a movimentação dos personagens em blocos vazios
     public void movePersonagemBlocoVazio(int iPersonagem, int[] aPosition) {
         this.movePersonagem(iPersonagem, aPosition);
     }
-    
+
     //Método que faz a movimentação do pacman sobre a moeda
-    public void movePacmanMoeda(int[] aPosition){
-                          
+    public void movePacmanMoeda(int[] aPosition) {
+
         this.movePersonagem(4, aPosition);//Metodo que faz a movimentação
-        
+
         Run.Musica.musicaComer();//Chama musica
-        
+
         {
-          //Troca a imagem da moeda por um campo vazio
-          int iLine    = aPosition[2];
-          int iCol     = aPosition[3];
-          Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));                    
+            //Troca a imagem da moeda por um campo vazio
+            int iLine = aPosition[2];
+            int iCol = aPosition[3];
+            //   System.out.println("["+iLine+","+iCol+"]");
+            Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
         }
-        
+
         this.doArrayMoedas();//Refaz o array de moedas                
-        
+
     }
-    
+
     //Retorna valor random
     public static int getRandom(int[] array) {
         int rnd = new Random().nextInt(array.length);
         return array[rnd];
     }
-    
+
     //Muda a direção que um Ghost vai andar de modo randomico
     public void moveGhostRand(int iGhost) {
-        
+
         int aMovimentosPossiveis[] = new int[2];
-        
+
         switch (this.iMovimentoGhost[iGhost]) {
             case 1:
                 aMovimentosPossiveis[0] = 3;
@@ -465,21 +462,20 @@ public class Tabuleiro implements Runnable {
                 this.iMovimentoGhost[iGhost] = getRandom(aMovimentosPossiveis);
                 break;
         }
-        
-        
-    }        
-    
-     public void printMatriz(int[][] aMatrizMostrar){        
+
+    }
+
+    public void printMatriz(int[][] aMatrizMostrar) {
         for (int iLine = 0; iLine < iLinha; iLine++) {
             System.out.print("[");
             for (int iCol = 0; iCol < iColuna; iCol++) {
-                int iElemento = aMatriz[iLine][iCol];                
-                System.out.print(" "+iElemento+" ");
+                int iElemento = aMatriz[iLine][iCol];
+                System.out.print(" " + iElemento + " ");
             }
             System.out.println("]");
         }
     }
-     
+
     public int[] findPersonagem(int iPersonagem) {
         int[] iPos = new int[2];
 

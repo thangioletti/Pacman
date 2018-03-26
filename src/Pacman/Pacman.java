@@ -92,11 +92,19 @@ public class Pacman implements Runnable{
         while (true) {
             
             try {
-                Thread.sleep(10);
+                Thread.sleep(250);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Pacman.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+            Run.Pontuacao.setText(Run.oTb.iPontos - Run.oTb.contaPontos(false) + " pontos");
+            Run.oTb.finish();
+            try { 
+                Run.oTb.movingPac();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Pacman.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                
             this.Animation();                       
             
         }

@@ -21,25 +21,26 @@ public class Run extends javax.swing.JFrame {
     public static JLabel[] Ghost = new JLabel[4];
     public static Jlayer Musica = new Jlayer();
     public static Pacman oPac;
+    public static Tabuleiro oTb;
+    public static Tabuleiro oTb1;
     public static Thread th1;
     public static Thread th2;
     public static Thread th3;
     public static Thread th4;
     public static Thread th5;
+    public static Thread th6;
     
     /**
+     * 
+     * 
      * Creates new form Run
      */
 
     static Ghost aGhosts[] = new Ghost[4];
-        
     public Run() {
         initComponents();
 
-        Tabuleiro oTb = new Tabuleiro();                
-        
-        th4 = new Thread(oTb);
-        th4.start();
+        oTb = new Tabuleiro(4);                
         
         oPac = new Pacman(1);
                 

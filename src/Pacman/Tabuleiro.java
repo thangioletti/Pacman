@@ -5,6 +5,8 @@
  */
 package Pacman;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,13 +17,15 @@ import javax.swing.JOptionPane;
  *
  * @author angioletti
  */
-public class Tabuleiro implements Runnable {
+public class Tabuleiro {
 
     public final int iLinha = 7;
-    public final int iColuna = 20;
+    public final int iColuna = 19;
 
     public int[][] aMatriz = new int[iLinha][iColuna];
     public String[] aMoedas;
+    public boolean wait = false;
+    public boolean pacWait = false;
 
     public JLabel Black[][] = new JLabel[iLinha][iColuna];
 
@@ -30,17 +34,14 @@ public class Tabuleiro implements Runnable {
 
     public Random oRand = new Random();
 
-    public Tabuleiro() {
-
-        iMovimentoGhost = new int[7];
-        iMovimentoGhost[5] = 4;
+    public Tabuleiro(int iPersonagem) {
         /*VALORES
-        * 1 - Parede
-        * 2 - Espaço preto
-        * 3 - Espaço com semente
-        * 4 - Pacman
-        * 5 - Ghost
-        * 6 - Ghost
+            * 1 - Parede
+            * 2 - Espaço preto
+            * 3 - Espaço com semente
+            * 4 - Pacman
+            * 5 - Ghost
+            * 6 - Ghost
          */
         aMatriz[0][0] = 1;
         aMatriz[0][1] = 1;
@@ -182,48 +183,8 @@ public class Tabuleiro implements Runnable {
         this.doArrayMoedas();
         this.montaTabuleiro();
 
-    }
-
-    public boolean hasMoeda(int iLine, int iCol) {
-        String sSearch = iLine + "," + iCol;
-
-        for (String sPos : this.aMoedas) {
-            if (sPos.equals(sSearch)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    public void doArrayMoedas() {
-        this.aMoedas = new String[contaPontos(true)];
-
-        int i = 0;
-        for (int iLine = 0; iLine < iLinha; iLine++) {
-            for (int iCol = 0; iCol < iColuna; iCol++) {
-                if (aMatriz[iLine][iCol] == 3) {
-                    this.aMoedas[i] = iLine + "," + iCol;
-                    i++;
-                }
-            }
-        }
-    }
-
-    public void run() {
-        while (true) {
-
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Tabuleiro.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            Run.Pontuacao.setText(iPontos - contaPontos(false) + " pontos");
-            finish();
-            movingPac(); //Move pacman
-            movingGhost(5);
-        }
+        iMovimentoGhost = new int[7];
+        iMovimentoGhost[5] = 4;
 
     }
 
@@ -246,18 +207,30 @@ public class Tabuleiro implements Runnable {
 
     }
 
-    public void movingPac() {
-        this.moving(4, Run.oPac.getiDirection());
+    public void movingPac() throws InterruptedException {
+        if (!this.pacWait) {
+            this.moving(4, Run.oPac.getiDirection());
+        }
     }
 
-    public void movingGhost(int iGhost) {
-        this.moving(iGhost, this.iMovimentoGhost[iGhost]);
+    public void movingGhost(int iGhost) throws InterruptedException {
+        if (!this.wait) {
+            this.moving(iGhost, this.iMovimentoGhost[iGhost]);
+        }
     }
 
-    public void moving(int iPersonagem, int iDirection) {
+    public void moving(int iPersonagem, int iDirection) throws InterruptedException {
+
+        if (iPersonagem == 4) {
+            this.ghostWait();
+        } else {
+            this.pacWait();
+        }
+
         int aPos[] = this.findPersonagem(iPersonagem);
         int aPosition[] = this.paramsDirection(iDirection, aPos);
         int iElementoNoCaminho = aMatriz[aPosition[0]][aPosition[1]];
+
 
         /* 1 - Direita
         * 2 - Esquerda
@@ -277,7 +250,7 @@ public class Tabuleiro implements Runnable {
                     this.movePacmanMoeda(aPosition);
                 } else {
                     //GHOST utiliza o mesmo método de mover simples caso tenha moedas
-                    this.movePersonagemBlocoVazio(iPersonagem, aPosition);
+                    this.moveGhostMoeda(iPersonagem, aPosition);
                 }
                 break;
             case 4:
@@ -292,6 +265,11 @@ public class Tabuleiro implements Runnable {
                 break;
         }
 
+        if (iPersonagem == 4) {
+            this.ghostAlive();
+        } else {
+            this.pacAlive();
+        }
     }
 
     //RETORNA PARAMETROS DE MOVIMENTO TANTO LABEL QUANTO MATRIZES
@@ -350,19 +328,7 @@ public class Tabuleiro implements Runnable {
         {
             //Altera a matriz com os personagens
             this.aMatriz[iNewLine][iNewCol] = iPersonagem;
-
-            if (iPersonagem == 4) {
-                //Caso for o pacman bota um espaço vazio no lugar
-                this.aMatriz[iLine][iCol] = 2;
-            } else {
-                //Caso for um ghost
-                if (this.hasMoeda(iLine, iCol)) {
-                    this.aMatriz[iLine][iCol] = 3;
-                } else {
-                    this.aMatriz[iLine][iCol] = 2;
-                }
-            }
-
+            this.aMatriz[iLine][iCol] = 2;
         }
 
         {
@@ -378,13 +344,6 @@ public class Tabuleiro implements Runnable {
             iLocationLabel[0] = Black[iLine][iCol].getLocation().x + aPosition[6];//X
             iLocationLabel[1] = Black[iLine][iCol].getLocation().y + aPosition[7];//Y
             Black[iLine][iCol].setLocation(iLocationLabel[0], iLocationLabel[1]);
-
-            //Caso GHOST se tiver moeda mantem a moeda
-            if (!this.hasMoeda(iLine, iCol)) {
-                Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
-            } else {
-                Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/semente.png")));
-            }
         }
 
         {
@@ -405,28 +364,50 @@ public class Tabuleiro implements Runnable {
 
     }
 
+    /*if (iPersonagem == 4) {
+                this.aMatriz[iLine][iCol] = 2;
+            } else {
+                System.out.println("Ghost " + iLine + "," + iCol);
+                printMatriz(aMatriz);
+                if (this.hasMoeda(iLine, iCol)) {
+                    this.aMatriz[iLine][iCol] = 3;
+                } else if (!this.hasMoeda(iLine, iCol)) {
+                    this.aMatriz[iLine][iCol] = 2;
+                }
+            }*/
+    public void ghostWait() {
+        this.wait = true;
+    }
+
+    public void ghostAlive() {
+        this.wait = false;
+    }
+
+    public void pacWait() {
+        this.pacWait = true;
+    }
+
+    public void pacAlive() {
+        this.pacWait = false;
+    }
+
     //Método que faz a movimentação dos personagens em blocos vazios
     public void movePersonagemBlocoVazio(int iPersonagem, int[] aPosition) {
         this.movePersonagem(iPersonagem, aPosition);
+        this.redoMatriz(); //Refaz a matriz sem a moeda
     }
 
     //Método que faz a movimentação do pacman sobre a moeda
-    public void movePacmanMoeda(int[] aPosition) {
+    public void movePacmanMoeda(int[] aPosition) throws InterruptedException {
+        this.movePersonagem(4, aPosition);//Metodo que faz a movimentação         
+        Run.Musica.musicaComer();//Chama musica      
+        this.removeMoeda(aPosition[0], aPosition[1]);//Remove a moeda
+        this.redoMatriz(); //Refaz a matriz sem a moeda
+    }
 
-        this.movePersonagem(4, aPosition);//Metodo que faz a movimentação
-
-        Run.Musica.musicaComer();//Chama musica
-
-        {
-            //Troca a imagem da moeda por um campo vazio
-            int iLine = aPosition[2];
-            int iCol = aPosition[3];
-            //   System.out.println("["+iLine+","+iCol+"]");
-            Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
-        }
-
-        this.doArrayMoedas();//Refaz o array de moedas                
-
+    public void moveGhostMoeda(int iPersonagem, int[] aPosition) {
+        this.movePersonagem(iPersonagem, aPosition);//Metodo que faz a movimentação                      
+        this.redoMatriz(); //Refaz a matriz sem a moeda
     }
 
     //Retorna valor random
@@ -528,19 +509,15 @@ public class Tabuleiro implements Runnable {
                     Run.Fundo.add(Black[iLine][iCol]);
                     Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
                 } else if (aMatriz[iLine][iCol] == 2) {
-                    sImg = "preto";
                     Black[iLine][iCol] = new javax.swing.JLabel();
                     Black[iLine][iCol].setSize(26, 26);
                     Black[iLine][iCol].setLocation(iLeft, iTop);
                     Run.Fundo.add(Black[iLine][iCol]);
-                    Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
                 } else if (aMatriz[iLine][iCol] == 3) {
-                    sImg = "semente";
                     Black[iLine][iCol] = new javax.swing.JLabel();
                     Black[iLine][iCol].setSize(26, 26);
                     Black[iLine][iCol].setLocation(iLeft, iTop);
                     Run.Fundo.add(Black[iLine][iCol]);
-                    Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/" + sImg + ".png")));
                 } else if (aMatriz[iLine][iCol] == 4) {
                     sImg = "pac-close";
                     Run.Pacman = new javax.swing.JLabel();
@@ -561,6 +538,87 @@ public class Tabuleiro implements Runnable {
             }
             iTop += 26;
         }
+
+        this.setImages();
     }
 
+    public void setImages() {
+        for (int iLine = 0; iLine < iLinha; iLine++) {
+            for (int iCol = 0; iCol < iColuna; iCol++) {
+                int iElemento = this.aMatriz[iLine][iCol];
+                try {
+                    switch (iElemento) {
+                        case 2:
+                            Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/preto.png")));
+                            break;
+                        case 3:
+                            Black[iLine][iCol].setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacman/images/semente.png")));
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (NullPointerException e) {
+                    continue;
+                }
+            }
+        }
+    }
+
+    public boolean hasMoeda(int iLine, int iCol) {
+        String sSearch = iLine + "," + iCol;
+        for (String sPos : this.aMoedas) {
+            if (sPos.equals(sSearch)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void doArrayMoedas() {
+        this.aMoedas = new String[contaPontos(true)];
+
+        int i = 0;
+        for (int iLine = 0; iLine < iLinha; iLine++) {
+            for (int iCol = 0; iCol < iColuna; iCol++) {
+                if (aMatriz[iLine][iCol] == 3) {
+                    this.aMoedas[i] = iLine + "," + iCol;
+                    i++;
+                }
+            }
+        }
+    }
+
+    public void removeMoeda(int iLine, int iCol) {
+        String aNewMoedas[] = new String[this.aMoedas.length-1];
+        String sSearch = iLine + "," + iCol;
+        int i = 0;
+        for (String sPos : this.aMoedas) {
+            if (sPos.equals(sSearch)) {
+                System.out.println("REMOVER");
+            } else {
+                aNewMoedas[i] = sPos;
+                i++;
+            }            
+        }
+        this.aMoedas = aNewMoedas;
+    }
+
+    public void redoMatriz() {
+
+        for (int iLine = 0; iLine < iLinha; iLine++) {
+            for (int iCol = 0; iCol < iColuna; iCol++) {
+                if (this.hasMoeda(iLine, iCol) && this.aMatriz[iLine][iCol] == 2) {
+                    this.aMatriz[iLine][iCol] = 3;
+                } else if (!this.hasMoeda(iLine, iCol) && this.aMatriz[iLine][iCol] == 3) {
+                    this.aMatriz[iLine][iCol] = 2;
+                } else {
+                    this.aMatriz[iLine][iCol] = this.aMatriz[iLine][iCol];
+                }
+            }
+        }
+        
+        this.setImages();
+
+    }
 }

@@ -52,11 +52,16 @@ public class Ghost implements Runnable{
          while (true) {
             
             try {
-                Thread.sleep(100);
+                Thread.sleep(400);
             } catch (InterruptedException ex) {
                 Logger.getLogger(Pacman.class.getName()).log(Level.SEVERE, null, ex);
             }
             
+             try {
+                 Run.oTb.movingGhost(5);
+             } catch (InterruptedException ex) {
+                 Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
+             }
             this.Animation();
         }
     }
